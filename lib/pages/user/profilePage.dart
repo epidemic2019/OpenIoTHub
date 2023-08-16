@@ -6,11 +6,7 @@ import 'package:openiothub/generated/l10n.dart';
 import 'package:openiothub/model/custom_theme.dart';
 import 'package:openiothub/pages/user/tools/toolsTypePage.dart';
 import 'package:openiothub_api/openiothub_api.dart';
-import 'package:openiothub_common_pages/commPages/appInfo.dart';
-import 'package:openiothub_common_pages/commPages/settings.dart';
 import 'package:openiothub_common_pages/openiothub_common_pages.dart';
-import 'package:openiothub_common_pages/user/LoginPage.dart';
-import 'package:openiothub_common_pages/user/userInfoPage.dart';
 import 'package:openiothub_constants/constants/SharedPreferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,9 +23,9 @@ class _ProfilePageState extends State<ProfilePage> {
   String useremail = "";
   String usermobile = "";
 
-  String userAvatar;
+  late String userAvatar;
 
-  List<ListTile> _listTiles;
+  late List<ListTile> _listTiles;
 
   @override
   void initState() {
@@ -56,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           separatorBuilder: (context, index) {
             return Divider();
           },
-          itemCount: _listTiles == null? 1 : _listTiles.length + 1,
+          itemCount: _listTiles == null ? 1 : _listTiles.length + 1,
         ));
   }
 
@@ -78,8 +74,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Container _buildHeader() {
     return Container(
       color: Provider.of<CustomTheme>(context).isLightTheme()
-          ? CustomThemes.light.accentColor
-          : CustomThemes.dark.accentColor,
+          ? CustomThemes.light.primaryColorLight
+          : CustomThemes.dark.primaryColorDark,
       height: 150.0,
       child: Center(
         child: Column(
@@ -139,38 +135,40 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _listTiles = <ListTile>[
         ListTile(
-          //第一个功能项
+            //第一个功能项
             title: Text(S.current.profile_settings),
             leading: Icon(Icons.settings),
             trailing: Icon(Icons.arrow_right),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => SettingsPage(
-                    title: S.current.profile_settings,
-                  )));
+                        title: S.current.profile_settings,
+                        key: UniqueKey(),
+                      )));
             }),
         ListTile(
-          //第一个功能项
+            //第一个功能项
             title: Text(S.current.profile_servers),
             leading: Icon(Icons.send_rounded),
             trailing: Icon(Icons.arrow_right),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ServerPages(
-                    title: S.current.profile_servers,
-                  )));
+                        title: S.current.profile_servers,
+                        key: UniqueKey(),
+                      )));
             }),
         ListTile(
-          //第一个功能项
+            //第一个功能项
             title: Text(S.current.profile_tools),
             leading: Icon(Icons.pan_tool),
             trailing: Icon(Icons.arrow_right),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ToolsTypePage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ToolsTypePage()));
             }),
         ListTile(
-          //第二个功能项
+            //第二个功能项
             title: Text(S.current.profile_docs),
             leading: Icon(Icons.add_chart),
             trailing: Icon(Icons.arrow_right),
@@ -191,14 +189,16 @@ class _ProfilePageState extends State<ProfilePage> {
         //           : _goToURL(context, "https://wulian.work", "社区反馈");
         //     }),
         ListTile(
-          //第二个功能项
+            //第二个功能项
             title: Text(S.current.profile_about_this_app),
             leading: Icon(Icons.info),
             trailing: Icon(Icons.arrow_right),
             onTap: () {
               FlutterNatcloudService.start();
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AppInfoPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AppInfoPage(
+                        key: UniqueKey(),
+                      )));
             }),
       ];
     });
@@ -217,6 +217,23 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _goToURL(BuildContext context, String url, title) async {
+    WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(url));
     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
       return Scaffold(
         appBar: AppBar(title: Text(title), actions: <Widget>[
@@ -229,8 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
           //       _launchURL(url);
           //     })
         ]),
-        body: WebView(
-            initialUrl: url, javascriptMode: JavascriptMode.unrestricted),
+        body: WebViewWidget(controller: controller),
       );
     }));
   }
@@ -239,16 +255,16 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(SharedPreferencesKey.USER_NAME_KEY)) {
       setState(() {
-        username = prefs.getString(SharedPreferencesKey.USER_NAME_KEY);
+        username = prefs.getString(SharedPreferencesKey.USER_NAME_KEY)!;
       });
     } else {
       setState(() {
-        username = null;
+        username = "";
       });
     }
     if (prefs.containsKey(SharedPreferencesKey.USER_EMAIL_KEY)) {
       setState(() {
-        useremail = prefs.getString(SharedPreferencesKey.USER_EMAIL_KEY);
+        useremail = prefs.getString(SharedPreferencesKey.USER_EMAIL_KEY)!;
       });
     } else {
       setState(() {
@@ -257,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     if (prefs.containsKey(SharedPreferencesKey.USER_MOBILE_KEY)) {
       setState(() {
-        usermobile = prefs.getString(SharedPreferencesKey.USER_MOBILE_KEY);
+        usermobile = prefs.getString(SharedPreferencesKey.USER_MOBILE_KEY)!;
       });
     } else {
       setState(() {

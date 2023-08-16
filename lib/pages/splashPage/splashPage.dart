@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:openiothub/pages/homePage/homePage.dart';
 
@@ -12,7 +11,7 @@ class SplashPage extends StatefulWidget {
 class LaunchState extends State<SplashPage> {
   final String launchImage = "assets/images/splash/1.jpg";
   int _countdown = 1;
-  Timer _countdownTimer;
+  late Timer _countdownTimer;
 
   @override
   void initState() {
@@ -27,7 +26,6 @@ class LaunchState extends State<SplashPage> {
     print('启动页面结束');
     if (_countdownTimer != null && _countdownTimer.isActive) {
       _countdownTimer.cancel();
-      _countdownTimer = null;
     }
   }
 
@@ -38,10 +36,12 @@ class LaunchState extends State<SplashPage> {
 //          Navigator.of(context).pushNamed("/demo1");
           Navigator.of(context).pop();
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return MyHomePage();
+            return MyHomePage(
+              key: UniqueKey(),
+              title: '',
+            );
           }));
           _countdownTimer.cancel();
-          _countdownTimer = null;
         } else {
           _countdown -= 1;
         }

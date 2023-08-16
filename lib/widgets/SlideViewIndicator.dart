@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SlideViewIndicator extends StatefulWidget {
   final int count;
 
-  SlideViewIndicator(this.count, {Key key}) : super(key: key);
+  SlideViewIndicator(this.count, {required Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SlideViewIndicatorState();

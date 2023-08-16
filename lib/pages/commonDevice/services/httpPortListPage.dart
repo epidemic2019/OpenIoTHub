@@ -8,7 +8,7 @@ import 'package:server_grpc_api/pb/service.pb.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HttpPortListPage extends StatefulWidget {
-  HttpPortListPage({Key key, this.device}) : super(key: key);
+  HttpPortListPage({required Key key, required this.device}) : super(key: key);
 
   openiothub.Device device;
 
@@ -19,7 +19,7 @@ class HttpPortListPage extends StatefulWidget {
 class _HttpPortListPageState extends State<HttpPortListPage> {
   static const double IMAGE_ICON_WIDTH = 30.0;
   List<HTTPConfig> _HttpList = [];
-  Timer _timerPeriod;
+  late Timer _timerPeriod;
 
   @override
   void initState() {

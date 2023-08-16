@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:openiothub/generated/l10n.dart';
 import 'package:openiothub/model/custom_theme.dart';
 import 'package:openiothub/pages/mdnsService/mdnsServiceListPage.dart';
 import 'package:openiothub/pages/session/sessionListPage.dart';
@@ -12,10 +12,8 @@ import 'package:provider/provider.dart';
 
 import '../commonDevice/commonDeviceListPage.dart';
 
-import 'package:openiothub/generated/l10n.dart';
-
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({required Key key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -25,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Color _activeColor = Colors.orange;
   int _currentIndex = 0;
-  Timer _timer;
+  late Timer _timer;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -92,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   return SmartConfigTool(
                     title: "添加设备",
                     needCallBack: true,
+                    key: UniqueKey(),
                   );
                 },
               ),
@@ -105,13 +104,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget _buildBody(int index) {
     switch (index) {
       case 0:
-        return MdnsServiceListPage(title: S.current.tab_smart);
+        return MdnsServiceListPage(
+          title: S.current.tab_smart,
+          key: UniqueKey(),
+        );
         break;
       case 1:
-        return SessionListPage(title: S.current.tab_gateway);
+        return SessionListPage(
+          title: S.current.tab_gateway,
+          key: UniqueKey(),
+        );
         break;
       case 2:
-        return CommonDeviceListPage(title: S.current.tab_host);
+        return CommonDeviceListPage(
+          title: S.current.tab_host,
+          key: UniqueKey(),
+        );
         break;
       case 3:
         // return UserInfoPage();
@@ -133,8 +141,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildBotomItem(_currentIndex, 0, Icons.home, S.current.tab_smart),
-          _buildBotomItem(_currentIndex, 1, Icons.airplay, S.current.tab_gateway),
-          _buildBotomItem(_currentIndex, -1, null, "null"),
+          _buildBotomItem(
+              _currentIndex, 1, Icons.airplay, S.current.tab_gateway),
+          _buildBotomItem(_currentIndex, -1, Icons.ac_unit, "null"),
           _buildBotomItem(_currentIndex, 2, Icons.print, S.current.tab_host),
           _buildBotomItem(_currentIndex, 3, Icons.person, S.current.tab_user),
         ],
@@ -145,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   _buildBotomItem(int selectIndex, int index, IconData iconData, String title) {
     //未选中状态的样式
     TextStyle textStyle = TextStyle(fontSize: 12.0, color: Colors.grey);
-    MaterialColor iconColor = Colors.grey;
+    MaterialColor? iconColor = Colors.grey;
     double iconSize = 20;
     EdgeInsetsGeometry padding = EdgeInsets.only(top: 8.0);
 
@@ -153,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       //选中状态的文字样式
       textStyle = TextStyle(fontSize: 13.0, color: _activeColor);
       //选中状态的按钮样式
-      iconColor = _activeColor;
+      iconColor = _activeColor as MaterialColor?;
       iconSize = 25;
       padding = EdgeInsets.only(top: 6.0);
     }

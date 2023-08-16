@@ -11,7 +11,8 @@ import './services/tcpPortListPage.dart';
 import './services/udpPortListPage.dart';
 
 class CommonDeviceServiceTypesList extends StatefulWidget {
-  CommonDeviceServiceTypesList({Key key, this.device}) : super(key: key);
+  CommonDeviceServiceTypesList({required Key key, required this.device})
+      : super(key: key);
 
   Device device;
 
@@ -39,6 +40,7 @@ class _CommonDeviceServiceTypesListState
     "assets/images/ic_discover_pos.png",
   ];
   final titles = ["TCP端口", "UDP端口", "FTP端口"];
+
   // , "HTTP端口"
   final List listData = [];
 
@@ -131,19 +133,31 @@ class _CommonDeviceServiceTypesListState
     String title = item.title;
     if (title == "TCP端口") {
       Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
-        return TcpPortListPage(device: widget.device);
+        return TcpPortListPage(
+          device: widget.device,
+          key: UniqueKey(),
+        );
       }));
     } else if (title == "UDP端口") {
       Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
-        return UdpPortListPage(device: widget.device);
+        return UdpPortListPage(
+          device: widget.device,
+          key: UniqueKey(),
+        );
       }));
     } else if (title == "FTP端口") {
       Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
-        return FtpPortListPage(device: widget.device);
+        return FtpPortListPage(
+          device: widget.device,
+          key: UniqueKey(),
+        );
       }));
     } else if (title == "HTTP端口") {
       Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
-        return HttpPortListPage(device: widget.device);
+        return HttpPortListPage(
+          device: widget.device,
+          key: UniqueKey(),
+        );
       }));
     }
   }
@@ -338,5 +352,5 @@ class ListItem {
   String icon;
   String title;
 
-  ListItem({this.icon, this.title});
+  ListItem({required this.icon, required this.title});
 }

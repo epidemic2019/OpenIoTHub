@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:openiothub_common_pages/wifiConfig/smartConfigTool.dart';
 import 'package:openiothub_common_pages/wifiConfig/airkiss.dart';
-import 'package:openiothub_common_pages/wifiConfig/smartlink.dart';
 import 'package:openiothub_common_pages/wifiConfig/easylink.dart';
 import 'package:openiothub_common_pages/wifiConfig/oneshot.dart';
+import 'package:openiothub_common_pages/wifiConfig/smartConfigTool.dart';
+import 'package:openiothub_common_pages/wifiConfig/smartlink.dart';
 import 'package:openiothub_constants/constants/Constants.dart';
 
 class ToolsTypePage extends StatelessWidget {
@@ -108,63 +108,75 @@ class ToolsTypePage extends StatelessWidget {
 
   void handleListItemClick(BuildContext ctx, ListItem item) {
     String title = item.title;
-    switch(title) {
-      case "多协议配网": {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+    switch (title) {
+      case "多协议配网":
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return SmartConfigTool(
-            title: "Smartconfig配网",
-            needCallBack: false,
-          );
-        }));
-      }
-      break;
-      case "Airkiss": {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+            return SmartConfigTool(
+              title: "Smartconfig配网",
+              needCallBack: false,
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
+      case "Airkiss":
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return Airkiss(
-            title: "微信 Airkiss",
-          );
-        }));
-      }
-      break;
-      case "Easylink": {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+            return Airkiss(
+              title: "微信 Airkiss",
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
+      case "Easylink":
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return Easylink(
-            title: "庆科 Easylink",
-          );
-        }));
-      }
-      break;
-      case "Smartlink": {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+            return Easylink(
+              title: "庆科 Easylink",
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
+      case "Smartlink":
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return Smartlink(
-            title: "汉枫 Smartlink",
-          );
-        }));
-      }
-      break;
-      case "Oneshot": {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+            return Smartlink(
+              title: "汉枫 Smartlink",
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
+      case "Oneshot":
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return Oneshot(
-            title: "联盛德 Oneshot",
-          );
-        }));
-      }
-      break;
-      default: {
-        Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+            return Oneshot(
+              title: "联盛德 Oneshot",
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
+      default:
+        {
+          Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
 //        smartconfig 工具页面
-          return SmartConfigTool(
-            title: "Smartconfig配网",
-            needCallBack: false,
-          );
-        }));
-      }
-      break;
+            return SmartConfigTool(
+              title: "Smartconfig配网",
+              needCallBack: false,
+              key: UniqueKey(),
+            );
+          }));
+        }
+        break;
     }
   }
 
@@ -192,5 +204,5 @@ class ListItem {
   String icon;
   String title;
 
-  ListItem({this.icon, this.title});
+  ListItem({required this.icon, required this.title});
 }

@@ -8,7 +8,7 @@ import 'package:openiothub_grpc_api/pb/service.pbgrpc.dart';
 import 'package:openiothub_plugin/plugins/openWithChoice/OpenWithChoice.dart';
 
 class TcpPortListPage extends StatefulWidget {
-  TcpPortListPage({Key key, this.device}) : super(key: key);
+  TcpPortListPage({required Key key, required this.device}) : super(key: key);
 
   Device device;
 
@@ -180,9 +180,9 @@ class _TcpPortListPageState extends State<TcpPortListPage> {
     TextEditingController _remote_port_controller =
         TextEditingController.fromValue(TextEditingValue(text: "80"));
     TextEditingController _local_port_controller =
-    TextEditingController.fromValue(TextEditingValue(text: "0"));
-    TextEditingController _domain_controller =
-    TextEditingController.fromValue(TextEditingValue(text: "www.example.com"));
+        TextEditingController.fromValue(TextEditingValue(text: "0"));
+    TextEditingController _domain_controller = TextEditingController.fromValue(
+        TextEditingValue(text: "www.example.com"));
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -241,15 +241,15 @@ class _TcpPortListPageState extends State<TcpPortListPage> {
                             int.parse(_remote_port_controller.text);
                         tcpConfig.localProt =
                             int.parse(_local_port_controller.text);
-                      }catch(e){
+                      } catch (e) {
                         Fluttertoast.showToast(msg: "检查端口是否为数字$e");
                         return;
                       }
                       tcpConfig.networkProtocol = "tcp";
-                      if(_domain_controller.text != "www.example.com"){
+                      if (_domain_controller.text != "www.example.com") {
                         tcpConfig.domain = _domain_controller.text;
                         tcpConfig.applicationProtocol = "http";
-                      }else{
+                      } else {
                         tcpConfig.applicationProtocol = "unknown";
                       }
                       CommonDeviceApi.createOneTCP(tcpConfig).then((restlt) {

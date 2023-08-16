@@ -29,11 +29,11 @@ class DataUtils {
       await sp.setString(SP_AC_TOKEN, accessToken);
       String refreshToken = data['refresh_token'];
       await sp.setString(SP_RE_TOKEN, refreshToken);
-      num uid = data['uid'];
+      int uid = data['uid'];
       await sp.setInt(SP_UID, uid);
       String tokenType = data['tokenType'];
       await sp.setString(SP_TOKEN_TYPE, tokenType);
-      num expiresIn = data['expires_in'];
+      int expiresIn = data['expires_in'];
       await sp.setInt(SP_EXPIRES_IN, expiresIn);
 
       await sp.setBool(SP_IS_LOGIN, true);
@@ -52,11 +52,11 @@ class DataUtils {
   }
 
   // 保存用户个人信息
-  static Future<UserInfo> saveUserInfo(Map data) async {
+  static Future<UserInfo?> saveUserInfo(Map data) async {
     if (data != null) {
       SharedPreferences sp = await SharedPreferences.getInstance();
       String name = data['name'];
-      num id = data['id'];
+      int id = data['id'];
       String gender = data['gender'];
       String location = data['location'];
       String avatar = data['avatar'];
@@ -83,14 +83,14 @@ class DataUtils {
   }
 
   // 获取用户信息
-  static Future<UserInfo> getUserInfo() async {
+  static Future<UserInfo?> getUserInfo() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    bool isLogin = sp.getBool(SP_IS_LOGIN);
+    bool? isLogin = sp.getBool(SP_IS_LOGIN);
     if (isLogin == null || !isLogin) {
       return null;
     }
     UserInfo userInfo = UserInfo();
-    userInfo.id = sp.getInt(SP_USER_ID);
+    userInfo.id = sp.getInt(SP_USER_ID)!;
     userInfo.name = sp.getString(SP_USER_NAME);
     userInfo.avatar = sp.getString(SP_USER_AVATAR);
     userInfo.email = sp.getString(SP_USER_EMAIL);
@@ -103,12 +103,12 @@ class DataUtils {
   // 是否登录
   static Future<bool> isLogin() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    bool b = sp.getBool(SP_IS_LOGIN);
+    bool? b = sp.getBool(SP_IS_LOGIN);
     return b != null && b;
   }
 
   // 获取accesstoken
-  static Future<String> getAccessToken() async {
+  static Future<String?> getAccessToken() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString(SP_AC_TOKEN);
   }
@@ -119,7 +119,7 @@ class DataUtils {
     sp.setInt(SP_COLOR_THEME_INDEX, colorThemeIndex);
   }
 
-  static Future<int> getColorThemeIndex() async {
+  static Future<int?> getColorThemeIndex() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getInt(SP_COLOR_THEME_INDEX);
   }

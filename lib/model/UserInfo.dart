@@ -1,12 +1,12 @@
 // 用户信息
 class UserInfo {
-  String gender;
-  String name;
-  String location;
-  num id;
-  String avatar;
-  String email;
-  String url;
+  String? gender;
+  String? name;
+  String? location;
+  int? id;
+  String? avatar;
+  String? email;
+  String? url;
 
   UserInfo(
       {this.id,

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:openiothub/model/custom_theme.dart';
 import 'package:openiothub/pages/session/sessionmDNSServiceListPage.dart';
@@ -15,10 +13,8 @@ import 'package:openiothub_grpc_api/pb/service.pb.dart';
 import 'package:openiothub_grpc_api/pb/service.pbgrpc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:iot_manager_grpc_api/iot_manager_grpc_api.dart';
-
 class SessionListPage extends StatefulWidget {
-  SessionListPage({Key key, this.title}) : super(key: key);
+  SessionListPage({required Key key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -30,7 +26,7 @@ class _SessionListPageState extends State<SessionListPage> {
   static const double IMAGE_ICON_WIDTH = 30.0;
 
   List<SessionConfig> _SessionList = [];
-  Timer _timerPeriod;
+  late Timer _timerPeriod;
 
   @override
   void initState() {
@@ -56,12 +52,13 @@ class _SessionListPageState extends State<SessionListPage> {
         var listItemContent = ListTile(
           leading: Icon(Icons.cloud_done,
               color: Provider.of<CustomTheme>(context).isLightTheme()
-                  ? CustomThemes.light.accentColor
-                  : CustomThemes.dark.accentColor),
+                  ? CustomThemes.light.primaryColorLight
+                  : CustomThemes.dark.primaryColorDark),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text("${pair.name}(${pair.description})", style: Constants.titleTextStyle),
+              Text("${pair.name}(${pair.description})",
+                  style: Constants.titleTextStyle),
             ],
           ),
           trailing: Constants.rightArrowIcon,
@@ -108,7 +105,7 @@ class _SessionListPageState extends State<SessionListPage> {
                 ThemeUtils.isDarkMode(context)
                     ? Image.asset('assets/images/empty_list_black.png')
                     : Image.asset('assets/images/empty_list.png'),
-                    Text("请使用右上角放大镜查找你在本局域网安装的网关"),
+                Text("请使用右上角放大镜查找你在本局域网安装的网关"),
               ]),
             ),
     );
@@ -120,7 +117,10 @@ class _SessionListPageState extends State<SessionListPage> {
       MaterialPageRoute(
         builder: (context) {
           // 写成独立的组件，支持刷新
-          return MDNSServiceListPage(sessionConfig: config);
+          return MDNSServiceListPage(
+            sessionConfig: config,
+            key: UniqueKey(),
+          );
         },
       ),
     ).then((result) {
@@ -136,7 +136,9 @@ class _SessionListPageState extends State<SessionListPage> {
       MaterialPageRoute(
         builder: (context) {
           // 写成独立的组件，支持刷新
-          return FindmDNSClientListPage();
+          return FindmDNSClientListPage(
+            key: UniqueKey(),
+          );
         },
       ),
     ).then((result) {

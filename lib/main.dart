@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:openiothub/generated/l10n.dart';
 import 'package:openiothub/init.dart';
 import 'package:openiothub/model/custom_theme.dart';
 import 'package:openiothub/pages/splashPage/splashPage.dart';
 import 'package:provider/provider.dart';
-
-import 'package:openiothub/generated/l10n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(
@@ -40,7 +39,6 @@ class MyApp extends StatelessWidget {
           print("locales:$locales");
           return;
         },
-        home: SplashPage()
-    );
+        home: SplashPage());
   }
 }

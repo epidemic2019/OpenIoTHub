@@ -6,7 +6,7 @@ import 'package:openiothub_grpc_api/pb/service.pb.dart';
 import 'package:openiothub_grpc_api/pb/service.pbgrpc.dart';
 
 class UdpPortListPage extends StatefulWidget {
-  UdpPortListPage({Key key, this.device}) : super(key: key);
+  UdpPortListPage({required Key key, required this.device}) : super(key: key);
 
   Device device;
 

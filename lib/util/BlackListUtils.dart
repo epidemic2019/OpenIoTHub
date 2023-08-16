@@ -9,9 +9,9 @@ class BlackListUtils {
   // 将对象数组转化为整型数组
   static List<int> convert(List objList) {
     if (objList == null || objList.isEmpty) {
-      return List<int>();
+      return List<int>.empty();
     }
-    List<int> intList = List();
+    List<int> intList = List<int>.empty();
     for (var obj in objList) {
       intList.add(obj['authorid']);
     }
@@ -19,11 +19,11 @@ class BlackListUtils {
   }
 
   // 字符串转化为整型数组
-  static List<int> _str2intList(String str) {
+  static List<int>? _str2intList(String str) {
     if (str != null && str.length > 0) {
       List<String> list = str.split(",");
       if (list != null && list.isNotEmpty) {
-        List<int> intList = List();
+        List<int> intList = List<int>.empty();
         for (String s in list) {
           intList.add(int.parse(s));
         }
@@ -34,7 +34,7 @@ class BlackListUtils {
   }
 
   // 整型数组转化为字符串
-  static String _intList2Str(List<int> list) {
+  static String? _intList2Str(List<int> list) {
     if (list == null || list.isEmpty) {
       return null;
     }
@@ -47,8 +47,8 @@ class BlackListUtils {
   }
 
   // 保存黑名单的id
-  static Future<String> saveBlackListIds(List<int> list) async {
-    String str = _intList2Str(list);
+  static Future<String?> saveBlackListIds(List<int> list) async {
+    String? str = _intList2Str(list);
     if (str != null) {
       SharedPreferences sp = await SharedPreferences.getInstance();
       sp.setString(spBlackList, str);
@@ -60,9 +60,9 @@ class BlackListUtils {
   }
 
   // 获取本地保存的黑名单id数据
-  static Future<List<int>> getBlackListIds() async {
+  static Future<List<int>?> getBlackListIds() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    String str = sp.getString(spBlackList);
+    String? str = sp.getString(spBlackList);
     if (str != null && str.length > 0) {
       return _str2intList(str);
     }
@@ -70,32 +70,32 @@ class BlackListUtils {
   }
 
   // 向黑名单中添加一个id
-  static Future<List<int>> addBlackId(int id) async {
-    List<int> list = await getBlackListIds();
+  static Future<List<int>?> addBlackId(int id) async {
+    List<int>? list = await getBlackListIds();
     if (list != null && list.isNotEmpty) {
       if (!list.contains(id)) {
         list.add(id);
-        String str = await saveBlackListIds(list);
-        return _str2intList(str);
+        String? str = await saveBlackListIds(list);
+        return _str2intList(str!);
       } else {
         return list;
       }
     } else {
-      List<int> l = List();
+      List<int> l = List<int>.empty();
       l.add(id);
-      String str = await saveBlackListIds(l);
-      return _str2intList(str);
+      String? str = await saveBlackListIds(l);
+      return _str2intList(str!);
     }
   }
 
   // 向黑名单中移除一个id
-  static Future<List<int>> removeBlackId(int id) async {
-    List<int> list = await getBlackListIds();
+  static Future<List<int>?> removeBlackId(int id) async {
+    List<int>? list = await getBlackListIds();
     if (list != null && list.isNotEmpty) {
       if (list.contains(id)) {
         list.remove(id);
-        String str = await saveBlackListIds(list);
-        return _str2intList(str);
+        String? str = await saveBlackListIds(list);
+        return _str2intList(str!);
       }
     }
     return list;

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iot_manager_grpc_api/iot_manager_grpc_api.dart';
@@ -29,8 +28,8 @@ class _ZipDevicesPageState extends State<ZipDevicesPage> {
         var listItemContent = ListTile(
           leading: Icon(Icons.devices,
               color: Provider.of<CustomTheme>(context).isLightTheme()
-                  ? CustomThemes.light.accentColor
-                  : CustomThemes.dark.accentColor),
+                  ? CustomThemes.light.primaryColorLight
+                  : CustomThemes.dark.primaryColorDark),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[

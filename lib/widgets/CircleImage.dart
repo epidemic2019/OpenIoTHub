@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum CircleImageType { network, asset }
@@ -10,15 +9,13 @@ class CircleImage extends StatefulWidget {
   CircleImageType type; // network, asset
 
   CircleImage(
-      {@required this.width,
-      @required this.height,
-      @required this.path,
-      @required this.type});
+      {required this.width,
+      required this.height,
+      required this.path,
+      required this.type});
 
   @override
-  State<StatefulWidget> createState() {
-    return null;
-  }
+  CircleImageState createState() => CircleImageState();
 }
 
 class CircleImageState extends State<CircleImage> {

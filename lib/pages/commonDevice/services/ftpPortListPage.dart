@@ -8,7 +8,7 @@ import 'package:openiothub_grpc_api/pb/service.pbgrpc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FtpPortListPage extends StatefulWidget {
-  FtpPortListPage({Key key, this.device}) : super(key: key);
+  FtpPortListPage({required Key key, required this.device}) : super(key: key);
 
   Device device;
 

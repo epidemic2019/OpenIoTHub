@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iot_manager_grpc_api/iot_manager_grpc_api.dart';
 import 'package:openiothub/model/custom_theme.dart';
-import 'package:openiothub_api/api/OpenIoTHub/SessionApi.dart';
-import 'package:openiothub_api/openiothub_api.dart';
 import 'package:openiothub_api/openiothub_api.dart';
 import 'package:openiothub_constants/constants/Config.dart';
 import 'package:openiothub_constants/constants/Constants.dart';
@@ -16,7 +14,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MDNSServiceListPage extends StatefulWidget {
-  MDNSServiceListPage({Key key, this.sessionConfig}) : super(key: key);
+  MDNSServiceListPage({required Key key, required this.sessionConfig})
+      : super(key: key);
 
   SessionConfig sessionConfig;
 
@@ -45,8 +44,8 @@ class _MDNSServiceListPageState extends State<MDNSServiceListPage> {
         var listItemContent = ListTile(
           leading: Icon(Icons.devices,
               color: Provider.of<CustomTheme>(context).isLightTheme()
-                  ? CustomThemes.light.accentColor
-                  : CustomThemes.dark.accentColor),
+                  ? CustomThemes.light.primaryColorLight
+                  : CustomThemes.dark.primaryColorDark),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -57,6 +56,24 @@ class _MDNSServiceListPageState extends State<MDNSServiceListPage> {
         );
         return InkWell(
           onTap: () {
+            WebViewController controller = WebViewController()
+              ..setJavaScriptMode(JavaScriptMode.unrestricted)
+              ..setBackgroundColor(const Color(0x00000000))
+              ..setNavigationDelegate(
+                NavigationDelegate(
+                  onProgress: (int progress) {
+                    // Update loading bar.
+                  },
+                  onPageStarted: (String url) {},
+                  onPageFinished: (String url) {},
+                  onWebResourceError: (WebResourceError error) {},
+                  onNavigationRequest: (NavigationRequest request) {
+                    return NavigationDecision.navigate;
+                  },
+                ),
+              )
+              ..loadRequest(
+                  Uri.parse("http://${Config.webgRpcIp}:${pair.localProt}"));
             //直接打开内置web浏览器浏览页面
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return Scaffold(
@@ -79,9 +96,7 @@ class _MDNSServiceListPageState extends State<MDNSServiceListPage> {
                             "http://${Config.webgRpcIp}:${pair.localProt}");
                       })
                 ]),
-                body: WebView(
-                    initialUrl: "http://${Config.webgRpcIp}:${pair.localProt}",
-                    javascriptMode: JavascriptMode.unrestricted),
+                body: WebViewWidget(controller: controller),
               );
             }));
           },
@@ -190,17 +205,22 @@ class _MDNSServiceListPageState extends State<MDNSServiceListPage> {
           ).toList();
           divided.add(TextButton(
               onPressed: () async {
-                var gatewayJwtValue = await GatewayManager.GetGatewayJwtByGatewayUuid(config.runId);
+                var gatewayJwtValue =
+                    await GatewayManager.GetGatewayJwtByGatewayUuid(
+                        config.runId);
                 String gatewayJwt = gatewayJwtValue.value;
                 Clipboard.setData(ClipboardData(text: gatewayJwt));
                 Fluttertoast.showToast(
-                    msg: "网关的token已经复制到了剪切板！你可以将此token作为网关参数运行或者添加到配置文件：bash>gateway-go -t <你的token>");
+                    msg:
+                        "网关的token已经复制到了剪切板！你可以将此token作为网关参数运行或者添加到配置文件：bash>gateway-go -t <你的token>");
               },
               child: Text("复制网关Token")));
           divided.add(TextButton(
               onPressed: () async {
                 String uuid = config.runId;
-                var gatewayJwtValue = await GatewayManager.GetGatewayJwtByGatewayUuid(config.runId);
+                var gatewayJwtValue =
+                    await GatewayManager.GetGatewayJwtByGatewayUuid(
+                        config.runId);
                 String gatewayJwt = gatewayJwtValue.value;
                 String data = '''
 gatewayuuid: ${getOneUUID()}
@@ -212,7 +232,8 @@ loginwithtokenmap:
 ''';
                 Clipboard.setData(ClipboardData(text: data));
                 Fluttertoast.showToast(
-                    msg: "网关的配置文件已经复制到了剪切板！你可以将这个配置内容复制到网关的配置文件(gateway-go.yaml)了");
+                    msg:
+                        "网关的配置文件已经复制到了剪切板！你可以将这个配置内容复制到网关的配置文件(gateway-go.yaml)了");
               },
               child: Text("复制网关配置内容")));
           return Scaffold(
@@ -265,6 +286,7 @@ loginwithtokenmap:
         builder: (context) {
           return MDNSInfoPage(
             portConfig: portConfig,
+            key: UniqueKey(),
           );
         },
       ),
@@ -273,46 +295,48 @@ loginwithtokenmap:
 
   _renameDialog() async {
     TextEditingController _new_name_controller =
-    TextEditingController.fromValue(
-        TextEditingValue(text: widget.sessionConfig.name));
+        TextEditingController.fromValue(
+            TextEditingValue(text: widget.sessionConfig.name));
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-            title: Text("修改名称："),
-            content: ListView(
-              children: <Widget>[
-                TextFormField(
-                  controller: _new_name_controller,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    labelText: '请输入新的名称',
-                    helperText: '名称',
+                title: Text("修改名称："),
+                content: ListView(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _new_name_controller,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        labelText: '请输入新的名称',
+                        helperText: '名称',
+                      ),
+                    )
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("取消"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
-                )
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text("取消"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text("修改"),
-                onPressed: () async {
-                  //修改服务器上的
-                  GatewayInfo gatewayInfo = GatewayInfo();
-                  gatewayInfo.gatewayUuid = widget.sessionConfig.runId;
-                  gatewayInfo.name = _new_name_controller.text;
-                  gatewayInfo.description = widget.sessionConfig.description;
-                  GatewayManager.UpdateGateway(gatewayInfo);
-                  //修改本地的
-                  widget.sessionConfig.name = _new_name_controller.text;
-                  SessionApi.UpdateSessionNameDescription(widget.sessionConfig);
-                  Navigator.of(context).pop();
-                },
-              )
-            ]));
+                  TextButton(
+                    child: Text("修改"),
+                    onPressed: () async {
+                      //修改服务器上的
+                      GatewayInfo gatewayInfo = GatewayInfo();
+                      gatewayInfo.gatewayUuid = widget.sessionConfig.runId;
+                      gatewayInfo.name = _new_name_controller.text;
+                      gatewayInfo.description =
+                          widget.sessionConfig.description;
+                      GatewayManager.UpdateGateway(gatewayInfo);
+                      //修改本地的
+                      widget.sessionConfig.name = _new_name_controller.text;
+                      SessionApi.UpdateSessionNameDescription(
+                          widget.sessionConfig);
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ]));
   }
 }
