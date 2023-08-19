@@ -58,6 +58,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         // Fluttertoast.showToast(msg: "程序状态：${state.toString()}");
         exit(1);
         break;
+      default:
+        break;
     }
   }
 
